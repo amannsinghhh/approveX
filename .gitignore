@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.env
+.env.local
+.DS_Store
+*.log
+.vite/
+
+# Tool artifacts
+graphify-out/
+.claude/
+
+# Redis runtime snapshot — not source
+dump.rdb

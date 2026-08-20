@@ -1,0 +1,115 @@
+# Production stack (Phase 7): Caddy terminates TLS and serves the SPA,
+# /api/* is proxied to the API, the worker delivers webhooks and timers.
+#
+#   cp .env.example .env    # then set real secrets + APPROVEX_DOMAIN
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# See docs/DEPLOYMENT.md for the full runbook (DNS, backups, upgrades).
+name: approvex-prod
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: approvex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: approvex
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U approvex -d approvex']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    command: sh -c "pnpm --filter @approvex/api exec prisma migrate deploy && node apps/api/dist/main.js"
+    environment:
+      DATABASE_URL: postgresql://approvex:${POSTGRES_PASSWORD}@postgres:5432/approvex?schema=public
+      APP_DATABASE_URL: postgresql://approvex_app:${APP_DB_PASSWORD:-approvex_app}@postgres:5432/approvex?schema=public
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?set JWT_ACCESS_SECRET in .env}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?set JWT_REFRESH_SECRET in .env}
+      API_PUBLIC_URL: https://${APPROVEX_DOMAIN}
+      WEB_APP_URL: https://${APPROVEX_DOMAIN}
+      RATE_LIMIT_RPM: ${RATE_LIMIT_RPM:-300}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      OIDC_GOOGLE_CLIENT_ID: ${OIDC_GOOGLE_CLIENT_ID:-}
+      OIDC_GOOGLE_CLIENT_SECRET: ${OIDC_GOOGLE_CLIENT_SECRET:-}
+      OIDC_MICROSOFT_CLIENT_ID: ${OIDC_MICROSOFT_CLIENT_ID:-}
+      OIDC_MICROSOFT_CLIENT_SECRET: ${OIDC_MICROSOFT_CLIENT_SECRET:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    command: node apps/worker/dist/main.js
+    environment:
+      DATABASE_URL: postgresql://approvex:${POSTGRES_PASSWORD}@postgres:5432/approvex?schema=public
+      REDIS_URL: redis://redis:6379
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      MAIL_FROM: ${MAIL_FROM:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Copies the built SPA into the volume Caddy serves, then exits.
+  web-assets:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: sh -c "rm -rf /assets/* && cp -r apps/web/dist/. /assets/"
+    volumes:
+      - web_assets:/assets
+    restart: 'no'
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      APPROVEX_DOMAIN: ${APPROVEX_DOMAIN:?set APPROVEX_DOMAIN in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - web_assets:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_started
+      web-assets:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
+  redisdata:
+  web_assets:
+  caddy_data:
+  caddy_config:

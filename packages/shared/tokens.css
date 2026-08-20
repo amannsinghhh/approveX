@@ -1,0 +1,31 @@
+/*
+ * ApproveX design tokens (UI spec §2).
+ * Ledger + stamp: dense precise data in a mono face, decision states as
+ * ink-stamp chips. One meticulous light theme — dark mode is out of MVP scope.
+ */
+:root {
+  /* Color */
+  --paper: #fafaf7; /* app background — cool paper, not cream */
+  --surface: #ffffff; /* cards, tables, panels */
+  --ink: #16181d; /* primary text — near-black ink */
+  --ink-soft: #5a6070; /* secondary text, labels */
+  --rule: #e4e4de; /* hairline borders, table rules */
+  --brand: #1d4ed8; /* primary actions, links, focus rings */
+  --brand-ink: #172e8a; /* hover/pressed brand */
+
+  --stamp-approve: #0e7a4d;
+  --stamp-reject: #b42318;
+  --stamp-pending: #b45309;
+  --stamp-neutral: #475467;
+
+  /* ~8% opacity tints for stamp chip fills */
+  --stamp-approve-bg: rgba(14, 122, 77, 0.08);
+  --stamp-reject-bg: rgba(180, 35, 24, 0.08);
+  --stamp-pending-bg: rgba(180, 83, 9, 0.08);
+  --stamp-neutral-bg: rgba(71, 84, 103, 0.08);
+  --brand-bg: rgba(29, 78, 216, 0.08);
+
+  /* Type */
+  --font-ui: 'Schibsted Grotesk', system-ui, sans-serif;
+  --font-data: 'IBM Plex Mono', ui-monospace, monospace;
+}
