@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local data & logs
+dump.rdb
+*.log
+.DS_Store
+
+# Test artifacts
+coverage/
+test-results/
+playwright-report/
+e2e/output/
