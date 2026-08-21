@@ -19,7 +19,7 @@ services:
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       RATE_LIMIT_RPM: 300
-    command: sh -c "npx prisma migrate deploy && node apps/api/dist/main.js"
+    command: sh -c "npx prisma migrate deploy --schema=apps/api/prisma/schema.prisma && node apps/api/dist/main.js"
 
   worker:
     build:
