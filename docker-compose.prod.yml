@@ -20,8 +20,7 @@ services:
       JWT_ACCESS_SECRET: 90eafce0c0548868d5bab20fb1ba82a648917d6e52ce7a9d085792278dd758f8
       JWT_REFRESH_SECRET: ba8d3c636799015ba135abcde67fba0059983d79b94fb7a2c9bee49c50691b7a
       RATE_LIMIT_RPM: 300
-    command: sh -c "pnpm --filter @approvex/api exec prisma migrate deploy && node apps/api/dist/main.js"
-
+    command: sh -c "DATABASE_URL='postgres://approvex:OWNER_PASSWORD@postgres:5432/approvex' pnpm --filter @approvex/api exec prisma migrate deploy && node apps/api/dist/main.js"
   worker:
     build:
       context: .
