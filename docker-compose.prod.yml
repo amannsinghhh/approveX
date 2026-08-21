@@ -11,6 +11,7 @@ services:
       redis: { condition: service_healthy }
     environment:
       NODE_ENV: production
+      MIGRATEDATABASE_URL: postgres://approvex_app:acac7b2f59b0d21d5f1e4bda42ea3fcc81c8414eba7874c454958d6c7ee14476@postgres:5432/approvex
       DATABASE_URL: postgres://approvex_app:3886ec8e3fa369dccf7fb54c35b7dfb47def4cbedd8a12f5ae5b4b44b49d151b@postgres:5432/approvex
       REDIS_URL: redis://redis:6379/0
       APPROVEX_DOMAIN: ${APPROVEX_DOMAIN}
