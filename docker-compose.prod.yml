@@ -11,7 +11,6 @@ services:
       redis: { condition: service_healthy }
     environment:
       NODE_ENV: production
-      MIGRATEDATABASE_URL: postgres://approvex_app:acac7b2f59b0d21d5f1e4bda42ea3fcc81c8414eba7874c454958d6c7ee14476@postgres:5432/approvex
       DATABASE_URL: postgres://approvex:OWNER_PASSWORD@postgres:5432/approvex
       APP_DATABASE_URL: postgres://approvex_app:3886ec8e3fa369dccf7fb54c35b7dfb47def4cbedd8a12f5ae5b4b44b49d151b@postgres:5432/approvex
 
@@ -22,7 +21,6 @@ services:
       JWT_ACCESS_SECRET: 90eafce0c0548868d5bab20fb1ba82a648917d6e52ce7a9d085792278dd758f8
       JWT_REFRESH_SECRET: ba8d3c636799015ba135abcde67fba0059983d79b94fb7a2c9bee49c50691b7a
       RATE_LIMIT_RPM: 300
-    command: sh -c "DATABASE_URL='postgres://approvex:OWNER_PASSWORD@postgres:5432/approvex' pnpm --filter @approvex/api exec prisma migrate deploy && node apps/api/dist/main.js"
   worker:
     build:
       context: .
@@ -37,7 +35,6 @@ services:
       REDIS_URL: redis://redis:6379/0
       JWT_ACCESS_SECRET: 90eafce0c0548868d5bab20fb1ba82a648917d6e52ce7a9d085792278dd758f8
       JWT_REFRESH_SECRET: ba8d3c636799015ba135abcde67fba0059983d79b94fb7a2c9bee49c50691b7a
-    command: node apps/worker/dist/main.js
 
   web:
     build:
