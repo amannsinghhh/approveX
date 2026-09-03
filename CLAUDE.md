@@ -164,9 +164,11 @@ our API before taking a business decision."
   create roles/fields/rule/workflow/binding through the NORMAL APIs client-side (idempotent-ish:
   409 → fetch-and-reuse). /accept-invite page closes the invitation loop (accept → auto-login).
 - CommandPalette (Cmd+K) mounted in AppShell; searches static nav/actions + recent requests.
-- Prod deploy: single Dockerfile.prod image plays api/worker/web-assets roles; Caddy serves the
-  SPA from a shared volume + proxies /api; scripts/backup.sh pg_dump rotate 14. Sentry init in
-  api main.ts only when SENTRY_DSN set (v10 SDK: init() only, no Nest handler wiring).
+- Prod deploy runs on Dokploy: Dockerfile.prod builds the api + worker targets, Dockerfile.web
+  serves the SPA via nginx, and Dokploy's Traefik terminates TLS and routes to `web`.
+  Dev compose uses the single Dockerfile.dev (api/web/worker targets — one install, shared build).
+  scripts/backup.sh pg_dump rotate 14. Sentry init in api main.ts only when SENTRY_DSN set
+  (v10 SDK: init() only, no Nest handler wiring).
 - Docs live in docs/ (ARCHITECTURE, SETUP, DEPLOYMENT, API-GUIDE, PRODUCT — the last one holds
   the pitch + demo script).
 

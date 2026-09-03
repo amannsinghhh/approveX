@@ -14,3 +14,4 @@ graphify-out/
 
 # Redis runtime snapshot — not source
 dump.rdb
+.codegraph/

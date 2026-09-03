@@ -4,6 +4,30 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@prisma/client':
+      specifier: 6.19.3
+      version: 6.19.3
+    '@types/node':
+      specifier: ^22.10.7
+      version: 22.20.0
+    ioredis:
+      specifier: ^5.11.1
+      version: 5.11.1
+    prisma:
+      specifier: 6.19.3
+      version: 6.19.3
+    tsx:
+      specifier: ^4.19.2
+      version: 4.23.0
+    typescript:
+      specifier: ^5.7.3
+      version: 5.9.3
+    vitest:
+      specifier: ^3.0.4
+      version: 3.2.7
+
 importers:
 
   .:
@@ -18,7 +42,7 @@ importers:
         specifier: ^3.4.2
         version: 3.9.4
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.9.3
       typescript-eslint:
         specifier: ^8.20.0
@@ -45,7 +69,7 @@ importers:
         specifier: ^11.0.0
         version: 11.4.5(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.27)(reflect-metadata@0.2.2)
       '@prisma/client':
-        specifier: 6.19.3
+        specifier: 'catalog:'
         version: 6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3)
       '@sentry/node':
         specifier: ^10.64.0
@@ -54,7 +78,7 @@ importers:
         specifier: ^0.44.0
         version: 0.44.0
       ioredis:
-        specifier: ^5.11.1
+        specifier: 'catalog:'
         version: 5.11.1
       reflect-metadata:
         specifier: ^0.2.2
@@ -79,28 +103,28 @@ importers:
         specifier: ^5.0.0
         version: 5.0.6
       '@types/node':
-        specifier: ^22.10.7
+        specifier: 'catalog:'
         version: 22.20.0
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.3
       prisma:
-        specifier: ^6.2.1
+        specifier: 'catalog:'
         version: 6.19.3(typescript@5.9.3)
       supertest:
         specifier: ^7.0.0
         version: 7.2.2
       tsx:
-        specifier: ^4.19.2
+        specifier: 'catalog:'
         version: 4.23.0
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.9.3
       unplugin-swc:
         specifier: ^1.5.1
         version: 1.5.9(@swc/core@1.15.43)(rollup@4.62.2)
       vitest:
-        specifier: ^3.0.4
+        specifier: 'catalog:'
         version: 3.2.7(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.23.0)
 
   apps/web:
@@ -146,7 +170,7 @@ importers:
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.23.0))
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.9.3
       vite:
         specifier: ^6.0.7
@@ -158,41 +182,41 @@ importers:
         specifier: workspace:*
         version: link:../../packages/shared
       '@prisma/client':
-        specifier: 6.19.3
+        specifier: 'catalog:'
         version: 6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3)
       bullmq:
         specifier: ^5.34.0
         version: 5.79.3
       ioredis:
-        specifier: ^5.11.1
+        specifier: 'catalog:'
         version: 5.11.1
     devDependencies:
       '@types/node':
-        specifier: ^22.10.7
+        specifier: 'catalog:'
         version: 22.20.0
       prisma:
-        specifier: ^6.2.1
+        specifier: 'catalog:'
         version: 6.19.3(typescript@5.9.3)
       tsx:
-        specifier: ^4.19.2
+        specifier: 'catalog:'
         version: 4.23.0
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.9.3
       vitest:
-        specifier: ^3.0.4
+        specifier: 'catalog:'
         version: 3.2.7(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.23.0)
 
   packages/shared:
     devDependencies:
       '@types/node':
-        specifier: ^22.10.7
+        specifier: 'catalog:'
         version: 22.20.0
       typescript:
-        specifier: ^5.7.3
+        specifier: 'catalog:'
         version: 5.9.3
       vitest:
-        specifier: ^3.0.4
+        specifier: 'catalog:'
         version: 3.2.7(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.23.0)
 
 packages:

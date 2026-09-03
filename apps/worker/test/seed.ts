@@ -3,7 +3,7 @@ import type { Prisma, PrismaClient } from '@prisma/client';
 
 /** Minimal direct-to-DB fixtures for processor tests (owner connection). */
 
-export interface SeededTenant {
+interface SeededTenant {
   tenantId: string;
   webhookSecret: string;
 }

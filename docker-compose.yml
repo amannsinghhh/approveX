@@ -30,7 +30,8 @@ services:
   api:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
+      dockerfile: Dockerfile.dev
+      target: api
     environment:
       DATABASE_URL: postgresql://approvex:approvex@postgres:5432/approvex?schema=public
       APP_DATABASE_URL: postgresql://approvex_app:approvex_app@postgres:5432/approvex?schema=public
@@ -49,7 +50,8 @@ services:
   worker:
     build:
       context: .
-      dockerfile: apps/worker/Dockerfile
+      dockerfile: Dockerfile.dev
+      target: worker
     environment:
       DATABASE_URL: postgresql://approvex:approvex@postgres:5432/approvex?schema=public
       APP_DATABASE_URL: postgresql://approvex_app:approvex_app@postgres:5432/approvex?schema=public
@@ -63,7 +65,8 @@ services:
   web:
     build:
       context: .
-      dockerfile: apps/web/Dockerfile
+      dockerfile: Dockerfile.dev
+      target: web
     environment:
       API_PROXY_TARGET: http://api:3000
     ports:

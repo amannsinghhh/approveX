@@ -1,5 +1,6 @@
-# Dev image — production multi-stage build lands in Phase 7 (deploy scripts).
-FROM node:22-alpine
+# Dev image — one install + shared build, three runtime targets.
+# Production images live in Dockerfile.prod (api/worker) and Dockerfile.web (SPA).
+FROM node:22-alpine AS base
 WORKDIR /app
 RUN corepack enable pnpm
 
@@ -13,5 +14,13 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm --filter @approvex/shared build
 
+FROM base AS api
+EXPOSE 3000
+CMD ["sh", "-c", "pnpm --filter @approvex/api exec prisma migrate deploy && pnpm --filter @approvex/api dev"]
+
+FROM base AS web
 EXPOSE 5173
 CMD ["pnpm", "--filter", "@approvex/web", "dev"]
+
+FROM base AS worker
+CMD ["pnpm", "--filter", "@approvex/worker", "dev"]

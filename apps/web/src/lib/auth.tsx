@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { api, tokens } from './api';
 
-export interface Me {
+interface Me {
   id: string;
   email: string;
   name: string;

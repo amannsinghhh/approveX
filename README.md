@@ -156,8 +156,9 @@ CI (GitHub Actions) runs build, lint, format check, typecheck, tests, `prisma va
 - **Performance** — k6 verified p95 **45.8ms** over 1,000 published rules (target < 50ms):
   ranking uses a trace-free evaluator fast path (winner re-traced), `matchesConsidered` capped
   at 25 (`rulesConsidered` carries the total). Seed + script in `scripts/`.
-- **Deploy** — `docker-compose.prod.yml` + `Caddyfile` (automatic HTTPS, SPA + `/api` proxy),
-  `Dockerfile.prod`, nightly `scripts/backup.sh` (pg_dump, 14 kept), env-gated Sentry.
+- **Deploy** — Dokploy on one VPS: `docker-compose.prod.yml` (`Dockerfile.prod` for api/worker,
+  `Dockerfile.web` nginx for the SPA), Traefik terminates TLS, nightly `scripts/backup.sh`
+  (pg_dump, 14 kept), env-gated Sentry.
 
 ## Status
 

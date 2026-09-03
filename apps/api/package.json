@@ -22,10 +22,10 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/swagger": "^11.0.0",
-    "@prisma/client": "6.19.3",
+    "@prisma/client": "catalog:",
     "@sentry/node": "^10.64.0",
     "argon2": "^0.44.0",
-    "ioredis": "^5.11.1",
+    "ioredis": "catalog:",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^3.24.1"
@@ -35,13 +35,13 @@
     "@nestjs/testing": "^11.0.0",
     "@swc/core": "^1.10.7",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.10.7",
+    "@types/node": "catalog:",
     "@types/supertest": "^6.0.2",
-    "prisma": "^6.2.1",
+    "prisma": "catalog:",
     "supertest": "^7.0.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.3",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "unplugin-swc": "^1.5.1",
-    "vitest": "^3.0.4"
+    "vitest": "catalog:"
   }
 }

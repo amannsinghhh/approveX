@@ -107,48 +107,6 @@ export function Card({
   );
 }
 
-const STAT_TONE_TEXT = {
-  default: 'text-ink',
-  approve: 'text-approve',
-  pending: 'text-pending',
-  brand: 'text-brand',
-} as const;
-
-/**
- * Big-number stat tile. List pages open with the figures people actually scan
- * for — the page reads as a workbench, not a bare table floating in space.
- */
-export function StatTile({
-  label,
-  value,
-  hint,
-  tone = 'default',
-  className,
-  style,
-}: {
-  label: string;
-  value: React.ReactNode;
-  hint?: string;
-  tone?: keyof typeof STAT_TONE_TEXT;
-  className?: string;
-  style?: React.CSSProperties;
-}): React.JSX.Element {
-  return (
-    <Card
-      className={cn('card-elevated animate-card-rise min-w-0 flex-1 px-3 py-2', className)}
-      style={style}
-    >
-      <p className="truncate text-xs font-medium uppercase tracking-[0.08em] text-ink-soft">
-        {label}
-      </p>
-      <p className={cn('mt-0.5 font-mono text-lg font-bold leading-none', STAT_TONE_TEXT[tone])}>
-        {value}
-      </p>
-      {hint && <p className="mt-1 truncate text-xs text-ink-soft">{hint}</p>}
-    </Card>
-  );
-}
-
 /** ALL / ANY style segmented control. */
 export function Segmented<T extends string>({
   value,

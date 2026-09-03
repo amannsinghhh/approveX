@@ -5,22 +5,6 @@
  * sandbox UI evaluate rules with the exact same code.
  */
 
-export const SHARED_PACKAGE_NAME = '@approvex/shared';
-
-/** Request lifecycle statuses (section 4 of the spec). */
-export const REQUEST_STATUSES = [
-  'pending',
-  'approved',
-  'rejected',
-  'cancelled',
-  'expired',
-] as const;
-export type RequestStatus = (typeof REQUEST_STATUSES)[number];
-
-/** Rule/workflow definition statuses. Published versions are immutable. */
-export const DEFINITION_STATUSES = ['draft', 'published', 'archived'] as const;
-export type DefinitionStatus = (typeof DEFINITION_STATUSES)[number];
-
 export * from './rule-evaluator';
 export * from './decision-table';
 export * from './workflow';

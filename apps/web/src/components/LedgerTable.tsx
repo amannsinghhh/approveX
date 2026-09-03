@@ -1,6 +1,6 @@
 import { cn } from '../lib/cn';
 
-export interface LedgerColumn<T> {
+interface LedgerColumn<T> {
   key: string;
   header: string;
   render: (row: T) => React.ReactNode;

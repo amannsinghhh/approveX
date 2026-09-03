@@ -28,14 +28,14 @@ import {
 } from '@approvex/shared';
 import { Button, Input, Segmented, Select } from './ui';
 
-export interface FieldDef {
+interface FieldDef {
   name: string;
   type: FieldType;
 }
 
 type Comparison = Extract<ConditionNode, { field: string }>;
 
-export const emptyComparison = (): ConditionNode => ({ field: '', operator: '=', value: '' });
+const emptyComparison = (): ConditionNode => ({ field: '', operator: '=', value: '' });
 export const emptyGroup = (): ConditionNode => ({
   operator: 'AND',
   children: [emptyComparison()],

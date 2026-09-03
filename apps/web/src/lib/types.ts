@@ -50,7 +50,7 @@ export interface ManagedList {
   updatedAt: string;
 }
 
-export interface RuleVersion {
+interface RuleVersion {
   id: string;
   version: number;
   ruleType: RuleTraceType;
@@ -78,7 +78,7 @@ export interface Rule {
   versions?: RuleVersion[];
 }
 
-export interface DecisionTableVersion {
+interface DecisionTableVersion {
   id: string;
   version: number;
   columns: DecisionTableColumn[];
@@ -132,7 +132,7 @@ export interface Paginated<T> {
 
 // ---------------------------------------------------------------- workflows
 
-export interface WorkflowVersionData {
+interface WorkflowVersionData {
   id: string;
   version: number;
   graph: { nodes: WorkflowGraphNode[]; edges: WorkflowGraphEdge[] };
@@ -174,7 +174,7 @@ export interface WorkflowData {
 
 // ----------------------------------------------------------------- requests
 
-export interface StepActionData {
+interface StepActionData {
   id: string;
   action: 'approve' | 'reject' | 'delegate' | 'comment';
   actorUserId: string;
@@ -187,7 +187,7 @@ export interface StepActionData {
   actedAt: string;
 }
 
-export interface RequestStepData {
+interface RequestStepData {
   id: string;
   nodeId: string;
   status: 'pending' | 'approved' | 'rejected' | 'cancelled' | 'superseded';
@@ -199,7 +199,7 @@ export interface RequestStepData {
   actions: StepActionData[];
 }
 
-export interface PendingApproverData {
+interface PendingApproverData {
   stepId: string;
   nodeId: string;
   roleId: string;

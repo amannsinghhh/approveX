@@ -5,7 +5,7 @@
  * wizard builds is exactly what you could build by hand.
  */
 
-export interface TemplateRole {
+interface TemplateRole {
   name: string;
   description: string;
 }

@@ -58,36 +58,6 @@ export function ThreePane({
   );
 }
 
-/** Two-pane variant: list left, detail fluid. Same rules as ThreePane. */
-export function ListDetail({
-  list,
-  detail,
-  listWidth = 320,
-  className,
-}: {
-  list: React.ReactNode;
-  detail: React.ReactNode;
-  listWidth?: number;
-  className?: string;
-}): React.JSX.Element {
-  return (
-    <div
-      className={cn(
-        'flex h-[calc(100dvh-96px)] min-h-0 overflow-hidden rounded-[10px] border border-rule bg-surface elev-sm',
-        className,
-      )}
-    >
-      <aside
-        style={{ width: listWidth }}
-        className="flex min-h-0 shrink-0 flex-col overflow-y-auto border-r border-rule"
-      >
-        {list}
-      </aside>
-      <section className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">{detail}</section>
-    </div>
-  );
-}
-
 /* ─── StatStrip ──────────────────────────────────────────────────────────── */
 
 const STAT_TONES = {
@@ -115,7 +85,7 @@ function Sparkline({ points }: { points: number[] }): React.JSX.Element | null {
   );
 }
 
-export interface StatStripItem {
+interface StatStripItem {
   key: string;
   label: string;
   value: React.ReactNode;
@@ -216,35 +186,6 @@ export function ContextRail({
   return (
     <div className={cn('flex min-h-0 flex-1 flex-col divide-y divide-rule', className)}>
       {children}
-    </div>
-  );
-}
-
-/* ─── StickyActionBar ────────────────────────────────────────────────────── */
-
-/**
- * Pinned to the bottom of a scrolling pane — approve/reject is always
- * reachable without scrolling (§3.2). Render as the last child of a pane.
- */
-export function StickyActionBar({
-  children,
-  note,
-  className,
-}: {
-  children: React.ReactNode;
-  /** Left-aligned quiet context, e.g. "Step 2 of 3 · SLA 4h left". */
-  note?: React.ReactNode;
-  className?: string;
-}): React.JSX.Element {
-  return (
-    <div
-      className={cn(
-        'sticky bottom-0 z-10 mt-auto flex items-center justify-between gap-2 border-t border-rule bg-surface/95 px-3 py-2 backdrop-blur',
-        className,
-      )}
-    >
-      <div className="min-w-0 truncate text-xs text-ink-soft">{note}</div>
-      <div className="flex shrink-0 items-center gap-2">{children}</div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ const TONE_STYLES: Record<StampTone, string> = {
   brand: 'text-brand border-brand bg-brand-bg',
 };
 
-export const STATUS_TONE: Record<string, StampTone> = {
+const STATUS_TONE: Record<string, StampTone> = {
   approved: 'approve',
   published: 'approve',
   active: 'approve',

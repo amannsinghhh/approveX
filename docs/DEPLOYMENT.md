@@ -1,13 +1,14 @@
 # Production deployment
 
-One VPS (2 vCPU / 4GB is plenty to start), Docker Compose, Caddy for automatic HTTPS. Total cost
+One VPS (2 vCPU / 4GB is plenty to start), Docker Compose, Dokploy for deploys and automatic
+HTTPS. Total cost
 to start: a domain plus a ~₹1,000/month server — see [What it costs to run](#what-it-costs-to-run)
 for the full breakdown at each stage of growth.
 
 ## 1. Point DNS
 
-Create an A record: `approvals.yourcompany.com → <server IP>`. Caddy provisions the TLS
-certificate automatically on first request.
+Create an A record: `approvals.yourcompany.com → <server IP>`. Dokploy's built-in Traefik
+provisions the TLS certificate automatically on first request.
 
 ## 2. Prepare the server
 
@@ -43,8 +44,8 @@ docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 What comes up: Postgres (volume-backed), Redis, the API (runs `prisma migrate deploy` first),
-the worker, a one-shot job that copies the built dashboard into Caddy's web root, and Caddy on
-80/443. Open `https://approvals.yourcompany.com`, sign up, and the first-run wizard takes it from
+the worker, and nginx serving the built dashboard (`Dockerfile.web`). Dokploy's Traefik terminates
+TLS on 80/443 and routes to the `web` service. Open `https://approvals.yourcompany.com`, sign up, and the first-run wizard takes it from
 there.
 
 **Harden the app DB role** (the dev default password is public):
@@ -97,7 +98,7 @@ Prices are indicative and converted at ~₹86/USD; check current rates.
 
 ### Stage 1 — Single VPS (everything on one box) · **~₹1,000–2,500 / month**
 
-Everything in `docker-compose.prod.yml` (API, worker, Postgres, Redis, Caddy) on one server. This
+Everything in `docker-compose.prod.yml` (API, worker, Postgres, Redis, nginx) on one server. This
 comfortably serves a handful of tenants and thousands of evaluations/day — it is what the load
 test ran on (p95 45.8ms).
 
@@ -105,7 +106,7 @@ test ran on (p95 45.8ms).
 | -------------------- | ----------------------------------------- | ----------------- |
 | VPS 2–3 vCPU / 4GB   | Hetzner CPX21, DO Droplet, E2E, Lightsail | ₹700 – ₹2,000     |
 | Domain (.com / .in)  | amortised from ~₹1,000/yr                 | ~₹85              |
-| TLS certificate      | Caddy → Let's Encrypt                     | **₹0**            |
+| TLS certificate      | Dokploy/Traefik → Let's Encrypt           | **₹0**            |
 | Email (up to ~3k/mo) | Resend free tier                          | **₹0**            |
 | Error monitoring     | Sentry free tier (5k events)              | **₹0**            |
 | Backups (local disk) | `scripts/backup.sh`, 14-day rotation      | **₹0**            |
@@ -136,7 +137,7 @@ changes.
 
 ### Stage 3 — Scale-out (many tenants, HA) · **~₹30,000+ / month**
 
-Two+ app replicas behind Caddy (or a load balancer), the worker scaled horizontally (safe as-is —
+Two+ app replicas behind Traefik (or a load balancer), the worker scaled horizontally (safe as-is —
 all claiming is `FOR UPDATE SKIP LOCKED`), a larger managed Postgres with read replica, and
 managed Redis with failover. Cost grows with Postgres size first; the app and worker tiers stay
 cheap because they're stateless. Budget monitoring/observability (Sentry, log retention, uptime)
@@ -153,6 +154,6 @@ as a fixed ~₹3,000–5,000 line at every stage above.
 
 ## Scaling notes (when you outgrow one box)
 
-- The API is stateless — run more replicas behind Caddy (`reverse_proxy api:3000 api2:3000`).
+- The API is stateless — run more replicas behind Dokploy's Traefik and let it round-robin them.
 - The worker is safe to scale horizontally as-is: all claiming is `FOR UPDATE SKIP LOCKED`.
 - Postgres is the real ceiling; move it to managed Postgres first, everything else last.

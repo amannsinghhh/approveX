@@ -2,7 +2,7 @@
  * (`root[2][1]`, `rows[3].cells[0]`) into plain locations, add fix hints,
  * and provide DOM anchors so clicking an issue scrolls to the culprit. */
 
-export interface ValidationIssueLike {
+interface ValidationIssueLike {
   path: string;
   message: string;
 }
