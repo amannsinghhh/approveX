@@ -49,7 +49,6 @@ pnpm build        # all packages, topological order
 pnpm lint         # eslint (flat config, type-aware)
 pnpm typecheck    # tsc --noEmit everywhere
 pnpm test         # vitest everywhere — see below
-pnpm format       # prettier --write
 ```
 
 ## Tests

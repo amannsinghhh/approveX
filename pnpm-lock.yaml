@@ -108,9 +108,6 @@ importers:
       eslint:
         specifier: ^9.18.0
         version: 9.39.5(jiti@2.7.0)
-      prettier:
-        specifier: ^3.4.2
-        version: 3.9.6
       prisma:
         specifier: 6.19.3
         version: 6.19.3(typescript@5.9.3)
@@ -6301,7 +6298,8 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.9.6: {}
+  prettier@3.9.6:
+    optional: true
 
   prisma@6.19.3(typescript@5.9.3):
     dependencies:
