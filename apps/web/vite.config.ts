@@ -3,18 +3,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  root: __dirname,
   plugins: [react(), tailwindcss()],
-  // @approvex/shared is CJS resolved through a workspace symlink (outside
-  // node_modules), so both the dev prebundler and rollup's commonjs interop
-  // must be told about it explicitly.
-  optimizeDeps: {
-    include: ['@approvex/shared'],
-  },
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/, /packages\/shared/],
-    },
-  },
   server: {
     port: 5173,
     proxy: {

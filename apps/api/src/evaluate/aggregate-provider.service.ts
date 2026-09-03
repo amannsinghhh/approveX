@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { AggregateRef, EvalContext } from '@approvex/shared';
-import { resolvePath, windowStartMs } from '@approvex/shared';
+import type { AggregateRef, EvalContext } from '../../../../shared/src/index';
+import { resolvePath, windowStartMs } from '../../../../shared/src/index';
 import type { Prisma } from '@prisma/client';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';
 import { RedisService } from '../redis/redis.service';

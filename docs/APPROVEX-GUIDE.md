@@ -217,8 +217,7 @@ Leave that running, open a **new** Terminal tab (⌘+T), and run these:
 
 ```bash
 cd "/Users/amansingh/Desktop/rule engine"
-pnpm --filter @approvex/shared build
-pnpm --filter @approvex/api exec prisma migrate dev
+pnpm prisma:migrate
 ```
 
 **What this does:** builds the shared toolkit **first** (the other parts depend on it — this order
@@ -227,13 +226,13 @@ matters), then sets up the database tables and security.
 Now start the three parts, each in its own Terminal tab:
 
 ```bash
-pnpm --filter @approvex/api dev            # the API (runs on port 3000)
+pnpm dev:api            # the API (runs on port 3000)
 ```
 ```bash
-pnpm --filter @approvex/worker dev         # the background worker
+pnpm dev:worker         # the background worker
 ```
 ```bash
-pnpm --filter @approvex/web dev --port 5199 --strictPort   # the website (port 5199)
+pnpm dev:web --port 5199 --strictPort   # the website (port 5199)
 ```
 
 **What you should see:** each one prints that it started. Then open **http://localhost:5199/signup**
@@ -245,7 +244,6 @@ approval flow.
 
 ### A couple of "gotchas" the project warns about
 
-- **Always build `@approvex/shared` first** — the API, website, and worker all use it.
 - **There are two `.env` settings files** on the native path (project root + `apps/api/`). Keep them
   the same.
 - **Developers:** there's a rule in the code — *never* use `import type` for a class the API injects.

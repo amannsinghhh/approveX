@@ -3,7 +3,7 @@ import { z } from 'zod';
 /**
  * A rule version is either a condition tree or a scoring rule (addendum B.3 #3).
  * `ruleType` defaults to condition_tree so every existing payload stays valid;
- * the structure of conditionAst / scoringSpec is validated by @approvex/shared
+ * the structure of conditionAst / scoringSpec is validated by shared/src
  * (validateConditionAst / validateScoringSpec) once the type is known.
  */
 const ruleVersionFields = {

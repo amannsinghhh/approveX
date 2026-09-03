@@ -11,7 +11,7 @@ when it completes. Every state change lands in an immutable audit log.
 ## Stack
 
 pnpm monorepo — NestJS API (`apps/api`), React + Vite dashboard (`apps/web`), BullMQ worker
-(`apps/worker`), shared types + rule evaluator (`packages/shared`). PostgreSQL 16, Redis, Prisma.
+(`apps/worker`), shared types + rule evaluator (`shared`). PostgreSQL 16, Redis, Prisma.
 
 ## Getting started
 
@@ -22,7 +22,6 @@ docker compose up
 # Or locally:
 pnpm install
 cp .env.example .env
-pnpm --filter @approvex/shared build
 pnpm dev
 ```
 
@@ -57,7 +56,7 @@ CI (GitHub Actions) runs build, lint, format check, typecheck, tests, `prisma va
 - **Condition ASTs** — AND/OR/NOT (max depth 10) over 15 comparison operators including IN,
   BETWEEN, CONTAINS, and MATCHES_REGEX (ReDoS-screened + hard worker-thread timeout). Dot paths
   (`vendor.country`, `items[0].category`) supported. The evaluator is a pure function in
-  `packages/shared` with exhaustive unit tests.
+  `shared` with exhaustive unit tests.
 - **Explicit typing** — a per-tenant field registry (`/fields`) declares types; numeric strings
   compare numerically only for registered numeric fields. Type mismatches and missing fields are
   false (never 500) and recorded in the evaluation trace.
@@ -69,7 +68,7 @@ CI (GitHub Actions) runs build, lint, format check, typecheck, tests, `prisma va
 
 ## Dashboard (Phase 3)
 
-- **Design system** — ledger + stamp identity: tokens in `packages/shared/tokens.css`, Schibsted
+- **Design system** — ledger + stamp identity: tokens in `shared/tokens.css`, Schibsted
   Grotesk UI type, IBM Plex Mono for every ID/amount/timestamp, ink-stamp status chips.
 - **Rule Builder** — visual nested condition builder (All/Any groups, NOT, typed value inputs
   driven by the field registry), live JSON preview, and a Test tab that runs the draft against the

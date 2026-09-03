@@ -4,8 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { RejectionPolicy, WorkflowGraph } from '@approvex/shared';
-import { validateWorkflowGraph } from '@approvex/shared';
+import type { RejectionPolicy, WorkflowGraph } from '../../../../shared/src/index';
+import { validateWorkflowGraph } from '../../../../shared/src/index';
 import type { Prisma } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';

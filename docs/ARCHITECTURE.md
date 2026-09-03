@@ -21,7 +21,7 @@ pnpm monorepo, four packages:
 | `apps/api`        | NestJS modular monolith — every endpoint, both engines, all guards                                                                      |
 | `apps/worker`     | Background jobs — webhook delivery, SLA escalation timers, email notifications                                                          |
 | `apps/web`        | React + Vite dashboard — the "ledger + stamp" UI                                                                                        |
-| `packages/shared` | Pure logic used by API, worker, **and** browser: the rule evaluator, decision-table compiler, workflow graph validator, webhook signing |
+| `shared` | Pure logic used by API, worker, **and** browser: the rule evaluator, decision-table compiler, workflow graph validator, webhook signing |
 
 Postgres 16 is the source of truth. Redis serves three jobs: rule-set cache, rate-limit windows,
 BullMQ scheduling. Redis dying degrades performance, never correctness — every consumer falls back
@@ -81,7 +81,7 @@ addition to_ application scoping:
   global interceptor logs every mutating endpoint, and the engines write richer domain events
   (`request.approved`, `step.escalated`, `webhook.dead_lettered`, …) themselves.
 
-## The rule evaluator (packages/shared)
+## The rule evaluator (shared)
 
 A pure function over a JSON condition AST: `AND`/`OR`/`NOT` (max depth 10, 200 nodes) over 15
 comparison operators including `IN`, `BETWEEN`, `CONTAINS`, and `MATCHES_REGEX`. Semantics chosen

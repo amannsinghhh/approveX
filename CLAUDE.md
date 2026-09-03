@@ -9,12 +9,14 @@ our API before taking a business decision."
 
 ## Commands
 
-- `pnpm install` — install workspace deps (pnpm 9, Node ≥ 20)
-- `pnpm build | lint | typecheck | test` — run across all packages
-- `pnpm --filter @approvex/api dev` — API on :3000 (Swagger at /api/docs)
+- `pnpm install` — one package, one node_modules (pnpm 9, Node ≥ 20)
+- `pnpm build | lint | typecheck | test` — whole repo
+- `pnpm dev:api` — API on :3000 (Swagger at /api/docs)
 - `docker compose up` — postgres, redis, api, worker, web
-- Tests: Vitest everywhere. API tests need SWC (decorator metadata) — see `apps/api/vitest.config.ts`.
-- API tests need Postgres 16; they create/migrate their own `approvex_test` DB (test/global-setup.ts).
+- Tests: all under `__tests__/{api,worker,shared}`, one root `vitest.config.ts` with three
+  projects. The api project uses SWC (Nest DI needs decorator metadata).
+- API tests need Postgres 16; they create/migrate their own `approvex_test` DB
+  (`__tests__/api/global-setup.ts`).
   Local Postgres: `/opt/homebrew/opt/postgresql@16/bin/pg_ctl -D /opt/homebrew/var/postgresql@16 start`
 - Never `import type` a class that is injected via a Nest constructor — decorator metadata needs
   the runtime import (the eslint consistent-type-imports rule is off for this reason).
@@ -32,7 +34,7 @@ our API before taking a business decision."
 
 ## Architecture decisions (Phase 2)
 
-- Rule evaluator is pure and lives in `packages/shared/src/rule-evaluator/`. Missing field ⇒
+- Rule evaluator is pure and lives in `shared/src/rule-evaluator/`. Missing field ⇒
   comparison false + `missing_field` trace note (IS_NULL/IS_NOT_NULL treat missing as null).
   No silent coercion: registry-declared types coerce explicitly; type mismatch ⇒ false (even for
   `!=`) + `type_mismatch` note. Logical nodes never short-circuit (full trace). Depth cap 10,
@@ -54,11 +56,11 @@ our API before taking a business decision."
 
 ## Architecture decisions (Phase 3)
 
-- Decision tables compile to the SAME condition AST/evaluator (packages/shared/src/decision-table).
+- Decision tables compile to the SAME condition AST/evaluator (shared/src/decision-table).
   Cell grammar: `*` any · `> 500000` · `50000..500000` (BETWEEN) · `a, b` (IN) · quoted "42" stays
   string. Row outputs are opaque `{ workflow: KEY }` objects until Phase 4 binds workflows.
   Same draft/publish/immutability lifecycle as rules (shared DB trigger function).
-- Web app: Tailwind v4 (@tailwindcss/vite); design tokens in packages/shared/tokens.css mapped via
+- Web app: Tailwind v4 (@tailwindcss/vite); design tokens in shared/tokens.css mapped via
   @theme in apps/web/src/app.css. Fonts: Schibsted Grotesk (UI) + IBM Plex Mono (data) via Google
   Fonts. Signature components in src/components: StampChip (uppercase mono, -1° rotation),
   LedgerTable, TraceReceipt, EmptyState, MonoId, condition-builder. Primitives hand-styled in
@@ -66,14 +68,14 @@ our API before taking a business decision."
 - Rule Builder Test tab and decision-table editor evaluate CLIENT-SIDE with the shared evaluator
   (drafts aren't published so /evaluate can't see them). In the browser the regex worker is
   unavailable → heuristic-screen-only fallback (server still enforces the hard timeout).
-- @approvex/shared is CJS behind a workspace symlink: vite needs optimizeDeps.include +
-  build.commonjsOptions.include (see apps/web/vite.config.ts) or named imports break the build.
+- shared/ is imported as plain TypeScript source via relative paths (no package boundary), so
+  vite compiles it like any other source file — the old CJS/optimizeDeps workarounds are gone.
 - Local dev gotcha: the user runs other vite apps bound to [::1]:5173/5174 — start the web app on
-  a free port, e.g. `pnpm --filter @approvex/web dev --port 5199 --strictPort`.
+  a free port, e.g. `pnpm dev:web --port 5199 --strictPort`.
 
 ## Architecture decisions (Phase 4)
 
-- Graph validation lives in packages/shared/src/workflow (builder UI reuses it). Semantics:
+- Graph validation lives in shared/src/workflow (builder UI reuses it). Semantics:
   multiple outgoing edges = fork (all activate); a node with multiple incoming edges is an
   AND-join (activates when every inbound edge delivered); condition_branch picks the first
   matching conditional edge else the default (dead end ⇒ request rejected + audit). Validation
@@ -129,7 +131,7 @@ our API before taking a business decision."
   `prisma migrate deploy` against apps/api's schema (test/global-setup.ts).
 - Signature: X-ApproveX-Signature `t=<unix>,v1=<hmac hex of "t.body">`, per-tenant secret
   (rotate via POST /webhooks/secret/rotate). Sign/verify/backoff live in
-  packages/shared/src/webhooks (getBuiltinModule('node:crypto') — browser-import-safe).
+  shared/src/webhooks (getBuiltinModule('node:crypto') — browser-import-safe).
 - SLA escalation REASSIGNS assigned_role_id to escalateToRoleId (inbox/eligibility/quorum follow),
   sets escalated_to_role_id + sla_breached_at (the once-only marker), resets notified_at. No
   escalation role ⇒ step.sla_breached audit event only.
@@ -174,9 +176,11 @@ our API before taking a business decision."
 
 ## Repo layout
 
-pnpm monorepo: `apps/api` (NestJS modular monolith), `apps/web` (React + Vite dashboard),
-`apps/worker` (BullMQ processors, Phase 6), `packages/shared` (types + the rule evaluator —
-lives here so API and sandbox UI evaluate rules with identical code).
+Single pnpm package — one `package.json`, one `node_modules`, no workspaces:
+`apps/api` (NestJS modular monolith), `apps/web` (React + Vite dashboard),
+`apps/worker` (BullMQ processors), `shared` (types + the rule evaluator — API and
+sandbox UI import it by relative path so both evaluate rules with identical code),
+`__tests__` (all tests: api / worker / shared).
 
 ## Non-negotiable engineering principles
 
@@ -252,7 +256,7 @@ Work strictly in order; each phase ends with tests passing, OpenAPI/README updat
 
 - [x] Phase 0 — Foundations: monorepo, compose, Prisma init, health endpoint, CI, this file
 - [x] Phase 1 — Tenancy, auth (JWT), RBAC, RLS, audit_events + immutability trigger
-- [x] Phase 2 — Rule engine core (evaluator in packages/shared, exhaustive tests, dry_run only)
+- [x] Phase 2 — Rule engine core (evaluator in shared, exhaustive tests, dry_run only)
 - [x] Phase 3 — Rule Builder UI + decision tables (+ design tokens & shared UI components first)
 - [x] Phase 4 — Workflow engine + approvals (version pinning, quorum, maker-checker, execute mode)
 - [x] Phase 5 — Workflow Builder UI + Inbox UI

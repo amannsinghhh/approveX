@@ -3,7 +3,7 @@
  * one context, inserted directly (owner connection — the API would need 2,000
  * calls). Prints the credentials the k6 script logs in with.
  *
- *   pnpm --filter @approvex/api exec tsx ../../scripts/seed-load.ts
+ *   pnpm exec tsx scripts/seed-load.ts
  */
 import { randomBytes, randomUUID } from 'node:crypto';
 import { PrismaClient } from '@prisma/client';

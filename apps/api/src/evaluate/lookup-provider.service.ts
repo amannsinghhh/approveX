@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
-import type { FieldSchema, LookupFallbackBehavior } from '@approvex/shared';
-import { fieldMetaOf } from '@approvex/shared';
+import type { FieldSchema, LookupFallbackBehavior } from '../../../../shared/src/index';
+import { fieldMetaOf } from '../../../../shared/src/index';
 import { RedisService } from '../redis/redis.service';
 
 /**

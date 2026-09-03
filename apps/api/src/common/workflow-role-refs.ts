@@ -1,4 +1,4 @@
-import type { WorkflowGraph } from '@approvex/shared';
+import type { WorkflowGraph } from '../../../../shared/src/index';
 
 /**
  * A.1 #3 consequence previews — find where a role is load-bearing before an

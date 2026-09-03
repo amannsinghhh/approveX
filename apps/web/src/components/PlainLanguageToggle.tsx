@@ -5,8 +5,8 @@
  * the builder; this pane answers "what does this rule actually mean?".
  */
 import { useState } from 'react';
-import type { ComparisonNode, ConditionNode } from '@approvex/shared';
-import { isLogicalNode } from '@approvex/shared';
+import type { ComparisonNode, ConditionNode } from '../../../../shared/src/index';
+import { isLogicalNode } from '../../../../shared/src/index';
 import { Segmented } from './ui';
 
 function fmt(value: unknown): string {

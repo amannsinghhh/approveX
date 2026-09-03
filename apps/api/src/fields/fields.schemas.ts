@@ -4,7 +4,7 @@ import {
   FIELD_SOURCES,
   FIELD_TYPES,
   LOOKUP_FALLBACK_BEHAVIORS,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 import { z } from 'zod';
 
 // Addendum B.2: a field may declare a unit ("currency:INR"), minor-unit

@@ -1,4 +1,4 @@
-import { FIELD_INPUT_TYPES } from '@approvex/shared';
+import { FIELD_INPUT_TYPES } from '../../../../shared/src/index';
 import { useEffect, useState } from 'react';
 import { PageHeader } from '../components/AppShell';
 import { EmptyState } from '../components/EmptyState';

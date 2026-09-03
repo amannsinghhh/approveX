@@ -17,7 +17,7 @@ import type {
   ConditionNode,
   FieldType,
   OperandShape,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 import {
   AGGREGATE_COMPARISONS,
   DAY_NAMES,
@@ -25,7 +25,7 @@ import {
   OPERAND_SHAPE,
   isLogicalNode,
   operatorsForType,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 import { Button, Input, Segmented, Select } from './ui';
 
 interface FieldDef {

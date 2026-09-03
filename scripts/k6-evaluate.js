@@ -2,7 +2,7 @@
  * k6 load test (Phase 7 target: p95 < 50ms on POST /evaluate over 1,000
  * published rules). Seed first, disable throttling for the run:
  *
- *   pnpm --filter @approvex/api exec tsx ../../scripts/seed-load.ts
+ *   pnpm exec tsx scripts/seed-load.ts
  *   RATE_LIMIT_RPM=10000000 node apps/api/dist/main.js   # or restart dev API
  *   k6 run scripts/k6-evaluate.js
  */

@@ -6,7 +6,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { generateApprovalToken, hashApprovalToken } from '@approvex/shared/approval-tokens';
+import { generateApprovalToken, hashApprovalToken } from '../../../../shared/src/approval-tokens/index';
 import { AuditService } from '../audit/audit.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';
@@ -25,7 +25,7 @@ const IP_WINDOW_S = 60;
 const tokenMaxAttempts = (): number => Number(process.env.APPROVAL_TOKEN_MAX_ATTEMPTS ?? 10);
 const ipMaxAttempts = (): number => Number(process.env.APPROVAL_TOKEN_IP_MAX_ATTEMPTS ?? 60);
 
-// Single source of truth for the hash contract lives in @approvex/shared so the
+// Single source of truth for the hash contract lives in shared/ so the
 // worker's minting and the API's verification can never drift apart.
 const sha256 = (value: string): string => hashApprovalToken(value);
 

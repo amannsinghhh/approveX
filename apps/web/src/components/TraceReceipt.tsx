@@ -1,4 +1,4 @@
-import type { ScoreBreakdown, TraceEntry } from '@approvex/shared';
+import type { ScoreBreakdown, TraceEntry } from '../../../../shared/src/index';
 import { cn } from '../lib/cn';
 
 const formatValue = (value: unknown): string => {

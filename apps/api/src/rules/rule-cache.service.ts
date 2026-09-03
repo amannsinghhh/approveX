@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { ConditionNode, FieldMeta, FieldSchema, ScoringSpec } from '@approvex/shared';
-import { countComparisons, countScoringFactors } from '@approvex/shared';
+import type { ConditionNode, FieldMeta, FieldSchema, ScoringSpec } from '../../../../shared/src/index';
+import { countComparisons, countScoringFactors } from '../../../../shared/src/index';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';
 import { RedisService } from '../redis/redis.service';
 

@@ -1,12 +1,11 @@
+# SPA image: Vite build served by nginx. `/api` is proxied (see nginx.conf).
 FROM node:22-alpine AS build
 WORKDIR /app
 RUN corepack enable pnpm
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/web/package.json apps/web/
-COPY packages/shared/package.json packages/shared/
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod=false
 COPY . .
-RUN pnpm --filter @approvex/shared build && pnpm --filter @approvex/web build
+RUN pnpm build:web
 
 FROM nginx:alpine
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html

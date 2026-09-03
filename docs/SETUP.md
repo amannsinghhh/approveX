@@ -29,12 +29,11 @@ cp .env.example .env && cp .env.example apps/api/.env
 #   macOS/Homebrew: /opt/homebrew/opt/postgresql@16/bin/pg_ctl -D /opt/homebrew/var/postgresql@16 start
 #   or just: docker compose up postgres redis
 
-pnpm --filter @approvex/shared build          # the api/web/worker import its dist
-pnpm --filter @approvex/api exec prisma migrate dev   # creates schema + approvex_app role + RLS
+pnpm prisma:migrate   # creates schema + approvex_app role + RLS
 
-pnpm --filter @approvex/api dev               # API on :3000
-pnpm --filter @approvex/worker dev            # worker (reads apps/api/.env too)
-pnpm --filter @approvex/web dev --port 5199 --strictPort   # dashboard on :5199
+pnpm dev:api               # API on :3000
+pnpm dev:worker            # worker (reads apps/api/.env too)
+pnpm dev:web --port 5199 --strictPort   # dashboard on :5199
 ```
 
 Sign up at http://localhost:5199/signup — the first-run wizard takes the tenant from zero to a
@@ -57,17 +56,17 @@ pnpm format       # prettier --write
 
 | Suite                                                                       | Where             | Needs                                                                                           |
 | --------------------------------------------------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| Rule evaluator, decision tables, workflow validation, webhook signing (219) | `packages/shared` | nothing                                                                                         |
+| Rule evaluator, decision tables, workflow validation, webhook signing (219) | `shared` | nothing                                                                                         |
 | API e2e — auth, RLS, engines, webhooks, keys, rate limit (96)               | `apps/api`        | Postgres (creates/migrates `approvex_test` itself); Redis optional (rate-limit spec self-skips) |
 | Worker — delivery, escalation, notifications (10)                           | `apps/worker`     | Postgres (own DB `approvex_worker_test`)                                                        |
 
-Run one file: `pnpm --filter @approvex/api exec vitest run test/phase6.e2e-spec.ts`
+Run one file: `pnpm vitest run __tests__/api/phase6.e2e-spec.ts`
 
 ## Load test (Phase 7 target: p95 < 50ms over 1k rules)
 
 ```bash
-pnpm --filter @approvex/api exec tsx ../../scripts/seed-load.ts   # 1,000 published rules
-RATE_LIMIT_RPM=100000000 pnpm --filter @approvex/api start        # throttling off for the run
+pnpm exec tsx scripts/seed-load.ts   # 1,000 published rules
+RATE_LIMIT_RPM=100000000 pnpm dev:api        # throttling off for the run
 k6 run scripts/k6-evaluate.js
 ```
 
@@ -77,8 +76,7 @@ Recorded result: p95 45.8ms · avg 36.9ms · ~540 req/s · 0 failures (20 VUs, 3
 
 - **Never `import type` a class that NestJS injects** — decorator metadata needs the runtime
   import. The eslint rule that would "fix" this is disabled on purpose.
-- `@approvex/shared` is CJS behind a workspace symlink; the web app needs it in
-  `optimizeDeps.include` and `build.commonjsOptions.include` (already configured) or named
-  imports break.
-- API tests compile with SWC (decorator metadata); config in `apps/api/vitest.config.ts`.
+- `shared/` is plain TypeScript imported by relative path — no package boundary, no build step
+  of its own, no vite CJS workarounds.
+- API tests compile with SWC (decorator metadata); config in the root `vitest.config.ts`.
 - Two `.env` files locally (root for compose, `apps/api/.env` for native dev) — same contents.

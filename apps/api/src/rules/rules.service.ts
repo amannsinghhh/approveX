@@ -4,8 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { ConditionNode, ValidationResult } from '@approvex/shared';
-import { isCatchAllAst, validateConditionAst, validateScoringSpec } from '@approvex/shared';
+import type { ConditionNode, ValidationResult } from '../../../../shared/src/index';
+import { isCatchAllAst, validateConditionAst, validateScoringSpec } from '../../../../shared/src/index';
 import { Prisma } from '@prisma/client'; // value import: Prisma.DbNull
 import type { RuleType } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';

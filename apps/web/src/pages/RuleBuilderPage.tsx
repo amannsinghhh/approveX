@@ -2,13 +2,13 @@
  * Rule Builder (UI spec §5.2, restructure §3.3): three-pane workbench — rules
  * rail left (260), builder fluid center, live pane right (360) with JSON and
  * Test tabs. The Test tab runs the SAME evaluator the API uses — imported
- * from @approvex/shared — against the unsaved draft AST.
+ * from shared/ — against the unsaved draft AST.
  */
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2, Plus } from 'lucide-react';
-import type { ConditionNode, FieldSchema } from '@approvex/shared';
-import { evaluateCondition, validateConditionAst } from '@approvex/shared';
+import type { ConditionNode, FieldSchema } from '../../../../shared/src/index';
+import { evaluateCondition, validateConditionAst } from '../../../../shared/src/index';
 import { PageHeader } from '../components/AppShell';
 import { ConceptStrip } from '../components/ConceptStrip';
 import { ConditionGroup, emptyGroup } from '../components/condition-builder';

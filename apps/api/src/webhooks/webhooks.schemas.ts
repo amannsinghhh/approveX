@@ -1,4 +1,4 @@
-import { WEBHOOK_EVENT_TYPES } from '@approvex/shared';
+import { WEBHOOK_EVENT_TYPES } from '../../../../shared/src/index';
 import { z } from 'zod';
 
 const httpUrl = z

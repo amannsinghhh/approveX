@@ -1,8 +1,8 @@
-import { REJECTION_POLICIES } from '@approvex/shared';
+import { REJECTION_POLICIES } from '../../../../shared/src/index';
 import { z } from 'zod';
 
 const definitionFields = {
-  graph: z.unknown(), // structure validated by @approvex/shared validateWorkflowGraph
+  graph: z.unknown(), // structure validated by shared/ validateWorkflowGraph
   rejectionPolicy: z.enum(REJECTION_POLICIES).default('any_reject_kills'),
 };
 

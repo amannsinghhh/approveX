@@ -1,0 +1,12 @@
+# The image installs its own Linux node_modules; copying the host's (macOS
+# binaries) over them breaks the build. Keep build context small and portable.
+node_modules
+dist
+apps/web/dist
+.git
+graphify-out
+.codegraph
+__tests__
+*.log
+.env
+.env.local

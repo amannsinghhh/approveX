@@ -1,4 +1,4 @@
-import type { WebhookEventType } from '@approvex/shared';
+import type { WebhookEventType } from '../../../shared/src/index';
 import type { Prisma } from '@prisma/client';
 
 type Db = Prisma.TransactionClient;

@@ -20,7 +20,7 @@ import {
   ReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import type { ConditionNode } from '@approvex/shared';
+import type { ConditionNode } from '../../../../shared/src/index';
 import { PageHeader } from '../components/AppShell';
 import { ConditionGroup, emptyGroup } from '../components/condition-builder';
 import { FieldHelp } from '../components/FieldHelp';

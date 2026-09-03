@@ -1,26 +1,20 @@
-# Dev image — one install + shared build, three runtime targets.
+# Dev image — one install, three runtime targets sharing it.
 # Production images live in Dockerfile.prod (api/worker) and Dockerfile.web (SPA).
 FROM node:22-alpine AS base
 WORKDIR /app
 RUN corepack enable pnpm
-
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/api/package.json apps/api/
-COPY apps/worker/package.json apps/worker/
-COPY apps/web/package.json apps/web/
-COPY packages/shared/package.json packages/shared/
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
-
 COPY . .
-RUN pnpm --filter @approvex/shared build
+RUN pnpm prisma:generate
 
 FROM base AS api
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm --filter @approvex/api exec prisma migrate deploy && pnpm --filter @approvex/api dev"]
+CMD ["sh", "-c", "pnpm prisma:deploy && pnpm dev:api"]
 
 FROM base AS web
 EXPOSE 5173
-CMD ["pnpm", "--filter", "@approvex/web", "dev"]
+CMD ["pnpm", "dev:web", "--host"]
 
 FROM base AS worker
-CMD ["pnpm", "--filter", "@approvex/worker", "dev"]
+CMD ["pnpm", "dev:worker"]

@@ -1,0 +1,10 @@
+{
+  // Production build: sources only, no tests. Emits to dist/, mirroring the repo
+  // layout, so the entrypoints are dist/apps/{api,worker}/src/main.js.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": ["apps/api/src", "apps/worker/src", "shared/src"]
+}

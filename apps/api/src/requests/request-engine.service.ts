@@ -10,8 +10,8 @@ import type {
   WorkflowEdge,
   WorkflowGraph,
   WorkflowNode,
-} from '@approvex/shared';
-import { edgeKey, evaluateCondition } from '@approvex/shared';
+} from '../../../../shared/src/index';
+import { edgeKey, evaluateCondition } from '../../../../shared/src/index';
 import type { Prisma, RequestStatus } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';

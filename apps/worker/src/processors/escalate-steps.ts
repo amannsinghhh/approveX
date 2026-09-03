@@ -1,4 +1,4 @@
-import type { ApprovalNodeConfig, WorkflowGraph } from '@approvex/shared';
+import type { ApprovalNodeConfig, WorkflowGraph } from '../../../../shared/src/index';
 import type { PrismaClient } from '@prisma/client';
 import { enqueueOutbox } from '../outbox';
 

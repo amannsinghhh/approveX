@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type { ConditionNode } from '@approvex/shared';
-import { isLogicalNode } from '@approvex/shared';
+import type { ConditionNode } from '../../../../shared/src/index';
+import { isLogicalNode } from '../../../../shared/src/index';
 import { PageHeader } from '../components/AppShell';
 import { operatorLabel } from '../components/condition-builder';
 import { EmptyState } from '../components/EmptyState';

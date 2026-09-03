@@ -10,7 +10,7 @@ import type {
   ScoringSpec,
   StructuredTrace,
   TraceEntry,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 
 export interface FieldDefinition {
   id: string;

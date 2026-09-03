@@ -1,4 +1,4 @@
-import { HIT_POLICIES } from '@approvex/shared';
+import { HIT_POLICIES } from '../../../../shared/src/index';
 import { z } from 'zod';
 
 const definitionFields = {

@@ -1,33 +1,24 @@
 # Production image: one dependency install + build, exposed as two runtime
-# targets — `api` and `worker`. Coolify builds each app with its own --target.
+# targets — `api` and `worker`. Dokploy builds each with its own --target.
 #
-# The web SPA is NOT built here: it deploys as a separate Coolify static site
-#   build:   pnpm --filter @approvex/web build
-#   publish: apps/web/dist
-# served at approvals.<domain>, with this API mounted at approvals.<domain>/api.
+# The web SPA is NOT built here; it has its own image (Dockerfile.web, nginx).
 FROM node:22-alpine AS build
 WORKDIR /app
 RUN corepack enable pnpm
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/api/package.json apps/api/
-COPY apps/worker/package.json apps/worker/
-COPY apps/web/package.json apps/web/
-COPY packages/shared/package.json packages/shared/
-RUN  pnpm install --frozen-lockfile --prod=false
+# Manifest first so the dependency layer caches independently of source edits.
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
 
 COPY . .
-RUN pnpm --filter @approvex/shared build \
-  && pnpm --filter @approvex/api exec prisma generate \
-  && pnpm --filter @approvex/api build \
-  && pnpm --filter @approvex/worker build
+RUN pnpm prisma:generate && pnpm build:server
 ENV NODE_ENV=production
 
 # ---- API: apply migrations, then serve HTTP on 3000 ----
 FROM build AS api
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm --filter @approvex/api exec prisma migrate deploy && node apps/api/dist/main.js"]
+CMD ["sh", "-c", "pnpm prisma:deploy && node dist/apps/api/src/main.js"]
 
 # ---- Worker: background webhooks + timers, no exposed port ----
 FROM build AS worker
-CMD ["node", "apps/worker/dist/main.js"]
+CMD ["node", "dist/apps/worker/src/main.js"]

@@ -1,4 +1,4 @@
-import { signWebhookPayload, webhookNextAttemptAt } from '@approvex/shared';
+import { signWebhookPayload, webhookNextAttemptAt } from '../../../../shared/src/index';
 import type { PrismaClient } from '@prisma/client';
 
 /**

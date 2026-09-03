@@ -4,8 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { DecisionTableDefinition } from '@approvex/shared';
-import { evaluateDecisionTable, validateDecisionTable } from '@approvex/shared';
+import type { DecisionTableDefinition } from '../../../../shared/src/index';
+import { evaluateDecisionTable, validateDecisionTable } from '../../../../shared/src/index';
 import type { Prisma } from '@prisma/client';
 import { AuditService } from '../audit/audit.service';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';

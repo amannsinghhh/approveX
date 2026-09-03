@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import type { FieldInputType, FieldType } from '@approvex/shared';
+import type { FieldInputType, FieldType } from '../../../../shared/src/index';
 import { EvaluateService } from '../evaluate/evaluate.service';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';
 import type { MyRequestsQuery, SubmitRequestDto } from './portal.schemas';

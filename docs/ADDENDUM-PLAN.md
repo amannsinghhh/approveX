@@ -9,7 +9,7 @@
 
 | Area                                                          | Today                                                                                                                         | Gap vs. addendum                                                                                                                                                                                                                                                                                                                        |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Operators** (`packages/shared/src/rule-evaluator/types.ts`) | 15: `= != > >= < <= IN NOT_IN CONTAINS STARTS_WITH ENDS_WITH BETWEEN IS_NULL IS_NOT_NULL MATCHES_REGEX`                       | ~25 missing: `NOT_BETWEEN MULTIPLE_OF WITHIN_PERCENT_OF NOT_CONTAINS IS_EMPTY EQUALS_IGNORE_CASE IN_IGNORE_CASE`, all date ops (`BEFORE/AFTER/ON/WITHIN_*_DAYS/OLDER_THAN_N_DAYS/DAY_OF_WEEK_IN/TIME_OF_DAY_BETWEEN`), array (`CONTAINS_ALL/ANY/LENGTH_*/ANY_ITEM_MATCHES/ALL_ITEMS_MATCH`), `EXISTS/NOT_EXISTS`, `IN_LIST/NOT_IN_LIST` |
+| **Operators** (`shared/src/rule-evaluator/types.ts`) | 15: `= != > >= < <= IN NOT_IN CONTAINS STARTS_WITH ENDS_WITH BETWEEN IS_NULL IS_NOT_NULL MATCHES_REGEX`                       | ~25 missing: `NOT_BETWEEN MULTIPLE_OF WITHIN_PERCENT_OF NOT_CONTAINS IS_EMPTY EQUALS_IGNORE_CASE IN_IGNORE_CASE`, all date ops (`BEFORE/AFTER/ON/WITHIN_*_DAYS/OLDER_THAN_N_DAYS/DAY_OF_WEEK_IN/TIME_OF_DAY_BETWEEN`), array (`CONTAINS_ALL/ANY/LENGTH_*/ANY_ITEM_MATCHES/ALL_ITEMS_MATCH`), `EXISTS/NOT_EXISTS`, `IN_LIST/NOT_IN_LIST` |
 | **AST node**                                                  | `{ field, operator, value }` — value is always a literal                                                                      | No `valueType: 'literal' \| 'field'` → cross-field comparison (B.3 #4) impossible today                                                                                                                                                                                                                                                 |
 | **Field registry** (`FieldDefinition`)                        | `name, type(number\|string\|boolean\|date), description`                                                                      | No `unit, precision, nullable, default_if_missing, source, enum values, list ref`                                                                                                                                                                                                                                                       |
 | **FieldSchema type**                                          | `Record<string, FieldType>` (name→type only)                                                                                  | Needs to become `Record<string, FieldMeta>` — ripples everywhere it is built (rules cache, decision-table compile)                                                                                                                                                                                                                      |
@@ -21,7 +21,7 @@
 
 ## Guiding architectural stance
 
-**The pure evaluator in `packages/shared` must stay pure and side-effect-free** — it runs
+**The pure evaluator in `shared` must stay pure and side-effect-free** — it runs
 identically in the browser sandbox and on the server. Therefore anything needing I/O
 (aggregates via history queries, managed lists, external lookups) is **pre-resolved by the
 API** and injected via `EvaluateOptions` (`lists`, `aggregates`, `lookups`, plus an
@@ -66,7 +66,7 @@ Shipped: `ruleType` discriminator on `rule_versions` (`condition_tree` | `scorin
 migration `20260709160000_addendum_scoring_rules` — `condition_ast` is now nullable, a new
 `scoring_spec` jsonb holds the spec, and a CHECK constraint keeps the two shapes exclusive
 (exactly one payload per type). Pure weighted-score evaluator in
-`packages/shared/src/rule-evaluator/scoring.ts`: factors are `{ field, weight, scoringFunction,
+`shared/src/rule-evaluator/scoring.ts`: factors are `{ field, weight, scoringFunction,
 missingScore? }` summed and compared with `threshold` via `>=` (default), `>`, `<=` or `<`.
 Five scoring functions — `linear` (0..1 normalization, clamped by default), `bands` (ascending
 step function, last band must be an open catch-all), `map` (exact lookup + `default`),
@@ -81,7 +81,7 @@ scoring rule (it would clobber the spec) until the M3 UI lands; the sandbox rece
 tally. Green: 285 shared unit tests (36 new), 111 API e2e (13 new), lint + typecheck + build.
 
 1. AST/DB: `rule_type` enum, nullable `condition_ast`, `scoring_spec` jsonb, CHECK constraint.
-2. `evaluateScoring` + `validateScoringSpec` + `countScoringFactors` in `packages/shared`.
+2. `evaluateScoring` + `validateScoringSpec` + `countScoringFactors` in `shared`.
 3. Evaluate service dispatches on `ruleType`; `matchesConsidered` entries carry it too.
 
 ### Milestone 3 — Decision tables + managed lists + Part A components (Phase 3) ✅ DONE

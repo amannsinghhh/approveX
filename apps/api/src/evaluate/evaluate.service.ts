@@ -5,8 +5,8 @@ import type {
   RuleTraceType,
   StructuredTrace,
   TraceEntry,
-} from '@approvex/shared';
-import type { AggregateRef } from '@approvex/shared';
+} from '../../../../shared/src/index';
+import type { AggregateRef } from '../../../../shared/src/index';
 import {
   DEFAULT_FISCAL_YEAR_START_MONTH,
   DEFAULT_TIMEZONE,
@@ -15,7 +15,7 @@ import {
   evaluateCondition,
   evaluateScoring,
   toStructuredTrace,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 import { AuditService } from '../audit/audit.service';
 import { TenantPrismaService } from '../prisma/tenant-prisma.service';
 import type { PendingApprover } from '../requests/request-engine.service';

@@ -4,7 +4,7 @@
  * a, b, @List), enum-typed columns edit as value chips (a multiselect compiles
  * to the IN-list grammar), and each row binds one or more named outputs plus an
  * optional nested-table chain (decisionTableRef). Test panel evaluates locally
- * via @approvex/shared, resolving chained tables from their published heads.
+ * via shared/, resolving chained tables from their published heads.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
@@ -16,12 +16,12 @@ import type {
   DecisionTableRow,
   FieldSchema,
   HitPolicy,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 import {
   DECISION_TABLE_REF_KEY,
   evaluateDecisionTable,
   validateDecisionTable,
-} from '@approvex/shared';
+} from '../../../../shared/src/index';
 import { PageHeader } from '../components/AppShell';
 import { FieldHelp } from '../components/FieldHelp';
 import { IssueList } from '../components/IssueList';

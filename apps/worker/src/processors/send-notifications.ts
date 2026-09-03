@@ -1,5 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
-import { generateApprovalToken } from '@approvex/shared/approval-tokens';
+import { generateApprovalToken } from '../../../../shared/src/approval-tokens/index';
 import { env } from '../env';
 import type { Mailer } from '../mailer';
 

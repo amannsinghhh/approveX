@@ -1,0 +1,14 @@
+{
+  // Server-side TypeScript: the API, the worker, the shared library and their tests.
+  // All three used to carry an identical CommonJS config; they are one program now.
+  // The web app is the only genuinely different target — see apps/web/tsconfig.json.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false
+  },
+  "include": ["apps/api/src", "apps/worker/src", "shared/src", "__tests__", "scripts"]
+}
